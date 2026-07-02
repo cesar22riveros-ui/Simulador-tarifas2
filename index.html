@@ -10,9 +10,9 @@
   //fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:#f7f6f2; --surface:#f9f8f5; --surface-2:#ffffff; --line:#d4d1ca;
+      --bg: #f7f6f2; --surface:#f9f8f5; --surface-2:#ffffff; --line:#d4d1ca;
       --text:#28251d; --muted:#6f6d67; --primary:#01696f; --primary-2:#0c4e54;
-      --success:#2e5c10; --warn:#964219; --shadow:0 10px 28px rgba(26,26,26,.08);
+      --success:#2e5c10; --warn:#964219; --shadow:0 10px 28px rgba(26,26,26,0.08);
       --radius:18px;
     }
     [data-theme="dark"] {
@@ -60,6 +60,7 @@
   </style>
 </head>
 <body>
+
 <div class="app">
   <div class="topbar">
     <div class="brand">
@@ -139,10 +140,26 @@
         <div class="badge" id="rutaResumen">Ruta lista</div>
       </div>
       <div class="kpis">
-        <div class="kpi"><div class="label">Cobro por km calculado</div><div class="value" id="cobroKm">$0</div><div class="subv" id="detalleKm">Combustible + desgaste + depreciación</div></div>
-        <div class="kpi"><div class="label">Cobro por minuto calculado</div><div class="value" id="cobroMin">$0</div><div class="subv">Meta diaria / 8 horas / 60</div></div>
-        <div class="kpi"><div class="label">Km operativos totales</div><div class="value" id="kmTotales">0 km</div><div class="subv" id="detalleRuta">Incluye acercamiento y retorno</div></div>
-        <div class="kpi"><div class="label">Precio final sugerido</div><div class="value" id="precioFinal">$0</div><div class="subv" id="detallePrecio">Tarifa base + km + tiempo, ajustado por demanda</div></div>
+        <div class="kpi">
+          <div class="label">Cobro por km calculado</div>
+          <div class="value" id="cobroKm">$0</div>
+          <div class="subv" id="detalleKm">Combustible + desgaste + depreciación</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Cobro por minuto calculado</div>
+          <div class="value" id="cobroMin">$0</div>
+          <div class="subv">Meta diaria / 8 horas / 60</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Km operativos totales</div>
+          <div class="value" id="kmTotales">0 km</div>
+          <div class="subv" id="detalleRuta">Incluye acercamiento y retorno</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Precio final sugerido</div>
+          <div class="value" id="precioFinal">$0</div>
+          <div class="subv" id="detallePrecio">Tarifa base + km + tiempo, ajustado por demanda</div>
+        </div>
       </div>
       <div class="strip">
         <div class="pill"><strong id="tiempoTotal">0 min</strong><br>Tiempo total</div>
@@ -154,36 +171,30 @@
         <thead><tr><th>Concepto</th><th>Valor</th><th>Detalle</th></tr></thead>
         <tbody id="desglose"></tbody>
       </table>
-      <div class="footer-note">Ramal A: Las Cabras → San Vicente (Plaza). Ramal B: Códao → Santa Elena → Pichidegua.</div>
+      <div class="footer-note">
+        Ramal A: Las Cabras → San Vicente (Plaza). Ramal B: Códao → Santa Elena → Pichidegua.
+      </div>
     </section>
   </div>
 </div>
 
 <script>
 const graph = {
-  'Las Cabras':          { 'La Esperanza':        {km:5.4,  min:8}  },
-  'La Esperanza':        { 'Las Cabras':           {km:5.4,  min:8},
-                           'La Rosa':              {km:9.7,  min:10} },
-  'La Rosa':             { 'La Esperanza':         {km:9.7,  min:10},
-                           'Rosario Río':          {km:3.0,  min:3}  },
-  'Rosario Río':         { 'La Rosa':              {km:3.0,  min:3},
-                           'Códao':                {km:1.9,  min:3}  },
-  'Códao':               { 'Rosario Río':          {km:1.9,  min:3},
-                           'Concha y Toro':        {km:1.8,  min:2},
-                           'Santa Elena':          {km:1.7,  min:2}  },
-  'Santa Elena':         { 'Códao':                {km:1.7,  min:2},
-                           'Pichidegua':           {km:7.5,  min:11} },
-  'Pichidegua':          { 'Santa Elena':          {km:7.5,  min:11} },
-  'Concha y Toro':       { 'Códao':                {km:1.8,  min:2},
-                           'Sofruco':              {km:2.4,  min:3}  },
-  'Sofruco':             { 'Concha y Toro':        {km:2.4,  min:3},
-                           'Peumo':                {km:2.1,  min:4}  },
-  'Peumo':               { 'Sofruco':              {km:2.1,  min:4},
-                           'Tunca Abajo':          {km:5.7,  min:7}  },
-  'Tunca Abajo':         { 'Peumo':                {km:5.7,  min:7},
-                           'San Vicente (Plaza)':  {km:5.6,  min:9}  },
-  'San Vicente (Plaza)': { 'Tunca Abajo':          {km:5.6,  min:9}  }
+  'Las Cabras':          { 'La Esperanza': {km:5.4, min:8} },
+  'La Esperanza':        { 'Las Cabras': {km:5.4, min:8}, 'La Rosa': {km:9.7, min:10} },
+  'La Rosa':             { 'La Esperanza': {km:9.7, min:10}, 'Rosario Río': {km:3.0, min:3} },
+  'Rosario Río':         { 'La Rosa': {km:3.0, min:3}, 'Códao': {km:1.9, min:3} },
+  'Códao':               { 'Rosario Río': {km:1.9, min:3}, 'Concha y Toro': {km:1.8, min:2}, 'Santa Elena': {km:1.7, min:2} },
+  'Santa Elena':         { 'Códao': {km:1.7, min:2}, 'Pichidegua': {km:7.5, min:11} },
+  'Pichidegua':          { 'Santa Elena': {km:7.5, min:11} },
+  'Concha y Toro':       { 'Códao': {km:1.8, min:2}, 'Sofruco': {km:2.4, min:3} },
+  'Sofruco':             { 'Concha y Toro': {km:2.4, min:3}, 'Peumo': {km:2.1, min:4} },
+  'Peumo':               { 'Sofruco': {km:2.1, min:4}, 'Tunca Abajo': {km:5.7, min:7} },
+  'Tunca Abajo':         { 'Peumo': {km:5.7, min:7}, 'San Vicente (Plaza)': {km:5.6, min:9} },
+  'San Vicente (Plaza)': { 'Tunca Abajo': {km:5.6, min:9} }
 };
 
 const points = Object.keys(graph);
-const $ = id => document.
+const $ = id => document.getElementById(id);
+const money = n => '$' + Math.round(n).toLocaleString('es-CL');
+const num = id => Number($(id).value ||
