@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#01696f" />
   <title>Simulador de Tarifas</title>
-  //fonts.googleapis.com">
-  //fonts.gstatic.com" crossorigin>
+  //fonts.googleapis.com" rel="preconnect">
+  //fonts.gstatic.com" crossorigin rel="preconnect">
   //fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#ffffff;--line:#d4d1ca;--text:#28251d;--muted:#6f6d67;--primary:#01696f;--primary-2:#0c4e54;--success:#2e5c10;--warn:#964219;--shadow:0 10px 28px rgba(26,26,26,.08);--radius:18px}
@@ -62,24 +62,29 @@
     </div>
     <button class="toggle" id="themeBtn" aria-label="Cambiar tema">🌙 Tema</button>
   </div>
+
   <div class="grid">
     <section class="card">
       <h2>Parámetros</h2>
       <div class="fields">
+
         <div class="field full">
           abel for="origen">Lugar de salida real</label>
           <select id="origen"></select>
           <div class="hint">Este punto representa desde dónde parte el vehículo.</div>
         </div>
+
         <div class="field full">
           abel for="destino">Destino</label>
           <select id="destino"></select>
         </div>
+
         <div class="field">
           abel for="pickup">Recoger pasajero en otro punto</label>
           <select id="pickup"></select>
           <div class="hint">Opcional. Se suma el acercamiento antes del viaje.</div>
         </div>
+
         <div class="field">
           abel for="modoRegreso">Modo de retorno</label>
           <select id="modoRegreso">
@@ -88,65 +93,96 @@
             <option value="sin_regreso">Sin regreso considerado</option>
           </select>
         </div>
+
         <div class="field">
           abel for="combustible">Valor litro combustible (CLP)</label>
           <input id="combustible" type="number" value="1526" min="0" step="1">
         </div>
+
         <div class="field">
           abel for="rendimiento">Rendimiento vehículo (km/L)</label>
           <input id="rendimiento" type="number" value="15" min="1" step="0.1">
         </div>
+
         <div class="field">
           abel for="desgaste">Desgaste adicional por km (CLP)</label>
           <input id="desgaste" type="number" value="40" min="0" step="1">
         </div>
+
         <div class="field">
           abel for="depreciacion">Depreciación por km (CLP)</label>
           <input id="depreciacion" type="number" value="30" min="0" step="1">
         </div>
+
         <div class="field">
           abel for="metaDiaria">Meta diaria por 8 horas (CLP)</label>
           <input id="metaDiaria" type="number" value="30000" min="0" step="100">
         </div>
+
         <div class="field">
           abel for="tarifaBase">Tarifa base (CLP)</label>
           <input id="tarifaBase" type="number" value="280" min="0" step="10">
         </div>
+
         <div class="field">
           abel for="demanda">Factor de demanda</label>
           <input id="demanda" type="number" value="1" min="0.5" max="3" step="0.05">
         </div>
+
         <div class="field">
           abel for="viajesDia">Viajes diarios estimados</label>
           <input id="viajesDia" type="number" value="10" min="1" step="1">
         </div>
+
       </div>
     </section>
+
     <section class="card">
       <div class="section-title">
         <h2>Resultado automático</h2>
         <div class="badge" id="rutaResumen">Ruta lista</div>
       </div>
+
       <div class="kpis">
-        <div class="kpi"><div class="label">Cobro por km calculado</div><div class="value" id="cobroKm">$0</div><div class="subv" id="detalleKm">Combustible + desgaste + depreciación</div></div>
-        <div class="kpi"><div class="label">Cobro por minuto calculado</div><div class="value" id="cobroMin">$0</div><div class="subv">Meta diaria / 8 horas / 60</div></div>
-        <div class="kpi"><div class="label">Km operativos totales</div><div class="value" id="kmTotales">0 km</div><div class="subv" id="detalleRuta">Incluye acercamiento y retorno</div></div>
-        <div class="kpi"><div class="label">Precio final sugerido</div><div class="value" id="precioFinal">$0</div><div class="subv" id="detallePrecio">Tarifa base + km + tiempo</div></div>
+        <div class="kpi">
+          <div class="label">Cobro por km calculado</div>
+          <div class="value" id="cobroKm">$0</div>
+          <div class="subv" id="detalleKm">Combustible + desgaste + depreciación</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Cobro por minuto calculado</div>
+          <div class="value" id="cobroMin">$0</div>
+          <div class="subv">Meta diaria / 8 horas / 60</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Km operativos totales</div>
+          <div class="value" id="totales">0 km</div>
+          <div class="subv" id="detalleRuta">Incluye acercamiento y retorno</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Precio final sugerido</div>
+          <div class="value" id="precioFinal">$0</div>
+          <div class="subv" id="detallePrecio">Tarifa base + km + tiempo</div>
+        </div>
       </div>
+
       <div class="strip">
         <div class="pill"><strong id="tiempoTotal">0 min</strong><br>Tiempo total</div>
         <div class="pill"><strong id="ingresoDia">$0</strong><br>Ingreso diario bruto</div>
         <div class="pill"><strong id="costoViaje">$0</strong><br>Costo operativo viaje</div>
         <div class="pill"><strong id="utilidadViaje">$0</strong><br>Utilidad estimada</div>
       </div>
+
       <table>
         <thead><tr><th>Concepto</th><th>Valor</th><th>Detalle</th></tr></thead>
         <tbody id="desglose"></tbody>
       </table>
+
       <div class="footer-note">Ramal A: Las Cabras → San Vicente (Plaza). Ramal B: Códao → Santa Elena → Pichidegua.</div>
     </section>
   </div>
 </div>
+
 <script>
 const graph={
   'Las Cabras':{'La Esperanza':{km:5.4,min:8}},
@@ -170,11 +206,3 @@ const num=id=>Number($(id).value||0);
 function dijkstra(start,end){
   if(!start||!end||start===end)return{km:0,min:0};
   const dist={},prev={},visited=new Set();
-  points.forEach(p=>dist[p]=Infinity);
-  dist[start]=0;
-  let queue=[...points];
-  while(queue.length){
-    queue.sort((a,b)=>dist[a]-dist[b]);
-    const u=queue.shift();
-    if(u===end||dist[u]===Infinity)break;
-    visited.add
