@@ -4,15 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#01696f" />
-  <title>Simulador de Tarifas</title>
-  //fonts.googleapis.com" rel="preconnect">
-  //fonts.gstatic.com" crossorigin rel="preconnect">
-  //fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>simulador-tarifas-auto-pwa</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#ffffff;--line:#d4d1ca;--text:#28251d;--muted:#6f6d67;--primary:#01696f;--primary-2:#0c4e54;--success:#2e5c10;--warn:#964219;--shadow:0 10px 28px rgba(26,26,26,.08);--radius:18px}
-    [data-theme="dark"]{--bg:#171614;--surface:#1c1b19;--surface-2:#201f1d;--line:#393836;--text:#ece8df;--muted:#a8a39a;--primary:#4f98a3;--primary-2:#6ab0bb;--success:#86c361;--warn:#d69b72;--shadow:0 10px 28px rgba(0,0,0,.35)}
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+    :root {
+      --bg: #f7f6f2; --surface:#f9f8f5; --surface-2:#ffffff; --line:#d4d1ca;
+      --text:#28251d; --muted:#6f6d67; --primary:#01696f; --primary-2:#0c4e54;
+      --success:#2e5c10; --warn:#964219; --shadow:0 10px 28px rgba(26, 26, 26, 0.08);
+      --radius:18px;
+    }
+    [data-theme="dark"] {
+      --bg:#171614; --surface:#1c1b19; --surface-2:#201f1d; --line:#393836;
+      --text:#ece8df; --muted:#a8a39a; --primary:#4f98a3; --primary-2:#6ab0bb;
+      --success:#86c361; --warn:#d69b72; --shadow:0 10px 28px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
     body{min-height:100vh}
     .app{max-width:1200px;margin:0 auto;padding:16px 16px 48px}
     .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
@@ -20,7 +29,7 @@
     .logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,var(--primary),var(--primary-2));display:grid;place-items:center;color:white;font-weight:800;box-shadow:var(--shadow)}
     h1{font-size:clamp(1.4rem,2vw,2.1rem);margin:0}
     .sub{color:var(--muted);font-size:.95rem;margin-top:4px}
-    .toggle{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 14px;color:var(--text);cursor:pointer}
+    .toggle{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 14px;color:var(--text)}
     .grid{display:grid;grid-template-columns:1.05fr 1.25fr;gap:16px}
     .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
     .card h2{font-size:1rem;margin:0 0 12px}
@@ -41,168 +50,235 @@
     th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:.9rem}
     th{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.03em}
     tr:last-child td{border-bottom:none}
-    .good{color:var(--success);font-weight:700}
-    .warn{color:var(--warn);font-weight:700}
+    .good{color:var(--success);font-weight:700}.warn{color:var(--warn);font-weight:700}
     .section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}
     .badge{font-size:.78rem;color:var(--primary);background:rgba(1,105,111,.08);padding:8px 10px;border-radius:999px;border:1px solid rgba(1,105,111,.18)}
     .footer-note{margin-top:12px;color:var(--muted);font-size:.82rem}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.strip{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}}
-    @media(max-width:560px){.app{padding:12px 12px 36px}.kpis{grid-template-columns:1fr}.strip{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
+    @media (max-width: 900px){.grid{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.strip{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}}
+    @media (max-width: 560px){.app{padding:12px 12px 36px}.kpis{grid-template-columns:1fr}.strip{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
   </style>
 </head>
 <body>
-<div class="app">
-  <div class="topbar">
-    <div class="brand">
-      <div class="logo">TR</div>
-      <div>
-        <h1>Simulador de tarifas</h1>
-        <div class="sub">Con selección de salida y destino, costos automáticos por km y minuto.</div>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">TR</div>
+        <div>
+          <h1>Simulador de tarifas</h1>
+          <div class="sub">Con selección de salida y destino, costos automáticos por km y minuto.</div>
+        </div>
       </div>
+      <button class="toggle" id="themeBtn" aria-label="Cambiar tema">🌙 Tema</button>
     </div>
-    <button class="toggle" id="themeBtn" aria-label="Cambiar tema">🌙 Tema</button>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Parámetros</h2>
+        <div class="fields">
+          <div class="field full">
+            <label for="origen">Lugar de salida real</label>
+            <select id="origen"></select>
+            <div class="hint">Este punto representa desde dónde parte el vehículo.</div>
+          </div>
+          <div class="field full">
+            <label for="destino">Destino</label>
+            <select id="destino"></select>
+          </div>
+          <div class="field">
+            <label for="pickup">Recoger pasajero en otro punto</label>
+            <select id="pickup"></select>
+            <div class="hint">Opcional. Si eliges uno, se suma el acercamiento antes del viaje.</div>
+          </div>
+          <div class="field">
+            <label for="modoRegreso">Modo de retorno</label>
+            <select id="modoRegreso">
+              <option value="origen">Volver al origen real</option>
+              <option value="pickup">Volver al punto de recogida</option>
+              <option value="destino">Sin regreso considerado</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="combustible">Valor litro combustible (CLP)</label>
+            <input id="combustible" type="number" value="1526" min="0" step="1">
+          </div>
+          <div class="field">
+            <label for="rendimiento">Rendimiento vehículo (km/L)</label>
+            <input id="rendimiento" type="number" value="15" min="1" step="0.1">
+          </div>
+          <div class="field">
+            <label for="desgaste">Desgaste adicional por km (CLP)</label>
+            <input id="desgaste" type="number" value="40" min="0" step="1">
+          </div>
+          <div class="field">
+            <label for="depreciacion">Depreciación por km (CLP)</label>
+            <input id="depreciacion" type="number" value="30" min="0" step="1">
+          </div>
+          <div class="field">
+            <label for="metaDiaria">Meta diaria por 8 horas (CLP)</label>
+            <input id="metaDiaria" type="number" value="30000" min="0" step="100">
+          </div>
+          <div class="field">
+            <label for="tarifaBase">Tarifa base (CLP)</label>
+            <input id="tarifaBase" type="number" value="280" min="0" step="10">
+          </div>
+          <div class="field">
+            <label for="demanda">Factor de demanda</label>
+            <input id="demanda" type="number" value="1" min="0.5" max="3" step="0.05">
+          </div>
+          <div class="field">
+            <label for="viajesDia">Viajes diarios estimados</label>
+            <input id="viajesDia" type="number" value="10" min="1" step="1">
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Resultado automático</h2>
+          <div class="badge" id="rutaResumen">Ruta lista</div>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><div class="label">Cobro por km calculado</div><div class="value" id="cobroKm">$0</div><div class="subv" id="detalleKm">Combustible + desgaste + depreciación</div></div>
+          <div class="kpi"><div class="label">Cobro por minuto calculado</div><div class="value" id="cobroMin">$0</div><div class="subv">Meta diaria / 8 horas / 60</div></div>
+          <div class="kpi"><div class="label">Km operativos totales</div><div class="value" id="kmTotales">0 km</div><div class="subv" id="detalleRuta">Incluye acercamiento y retorno</div></div>
+          <div class="kpi"><div class="label">Precio final sugerido</div><div class="value" id="precioFinal">$0</div><div class="subv" id="detallePrecio">Tarifa base + km + tiempo, ajustado por demanda</div></div>
+        </div>
+
+        <div class="strip">
+          <div class="pill"><strong id="tiempoTotal">0 min</strong><br>Tiempo total</div>
+          <div class="pill"><strong id="ingresoDia">$0</strong><br>Ingreso diario bruto</div>
+          <div class="pill"><strong id="costoViaje">$0</strong><br>Costo operativo viaje</div>
+          <div class="pill"><strong id="utilidadViaje">$0</strong><br>Utilidad estimada</div>
+        </div>
+
+        <table>
+          <thead>
+            <tr><th>Concepto</th><th>Valor</th><th>Detalle</th></tr>
+          </thead>
+          <tbody id="desglose"></tbody>
+        </table>
+
+        <div class="footer-note">La ruta usa los tramos definidos entre Las Cabras, La Esperanza, La Rosa, Rosario Río, Códao, Concha y Toro, Sofruco, Peumo, Tunca Abajo y San Vicente (Plaza).</div>
+      </section>
+    </div>
   </div>
 
-  <div class="grid">
-    <section class="card">
-      <h2>Parámetros</h2>
-      <div class="fields">
+  <script>
+    const points = [
+      'Las Cabras','La Esperanza','La Rosa','Rosario Río','Códao','Concha y Toro','Sofruco','Peumo','Tunca Abajo','San Vicente (Plaza)'
+    ];
+    const positions = {
+      'Las Cabras': {km:0, min:0},
+      'La Esperanza': {km:5.4, min:8},
+      'La Rosa': {km:15.1, min:18},
+      'Rosario Río': {km:18.1, min:21},
+      'Códao': {km:20.0, min:24},
+      'Concha y Toro': {km:21.8, min:26},
+      'Sofruco': {km:24.2, min:29},
+      'Peumo': {km:26.3, min:33},
+      'Tunca Abajo': {km:32.0, min:40},
+      'San Vicente (Plaza)': {km:37.6, min:49}
+    };
 
-        <div class="field full">
-          abel for="origen">Lugar de salida real</label>
-          <select id="origen"></select>
-          <div class="hint">Este punto representa desde dónde parte el vehículo.</div>
-        </div>
+    const $ = id => document.getElementById(id);
+    const money = n => '$' + Math.round(n).toLocaleString('es-CL');
+    const num = id => Number($(id).value || 0);
 
-        <div class="field full">
-          abel for="destino">Destino</label>
-          <select id="destino"></select>
-        </div>
+    function fillSelect(id, allowNone=false){
+      const el = $(id);
+      el.innerHTML = allowNone ? '<option value="">Sin punto extra</option>' : '';
+      points.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p; o.textContent = p; el.appendChild(o);
+      });
+    }
 
-        <div class="field">
-          abel for="pickup">Recoger pasajero en otro punto</label>
-          <select id="pickup"></select>
-          <div class="hint">Opcional. Se suma el acercamiento antes del viaje.</div>
-        </div>
+    function segment(a,b){
+      if(!a || !b) return {km:0, min:0};
+      return {
+        km: Math.abs(positions[b].km - positions[a].km),
+        min: Math.abs(positions[b].min - positions[a].min)
+      };
+    }
 
-        <div class="field">
-          abel for="modoRegreso">Modo de retorno</label>
-          <select id="modoRegreso">
-            <option value="origen">Volver al origen real</option>
-            <option value="pickup">Volver al punto de recogida</option>
-            <option value="sin_regreso">Sin regreso considerado</option>
-          </select>
-        </div>
+    function update(){
+      const origen = $('origen').value;
+      const destino = $('destino').value;
+      const pickup = $('pickup').value;
+      const modoRegreso = $('modoRegreso').value;
 
-        <div class="field">
-          abel for="combustible">Valor litro combustible (CLP)</label>
-          <input id="combustible" type="number" value="1526" min="0" step="1">
-        </div>
+      const combustible = num('combustible');
+      const rendimiento = num('rendimiento');
+      const desgaste = num('desgaste');
+      const depreciacion = num('depreciacion');
+      const metaDiaria = num('metaDiaria');
+      const tarifaBase = num('tarifaBase');
+      const demanda = num('demanda');
+      const viajesDia = num('viajesDia');
 
-        <div class="field">
-          abel for="rendimiento">Rendimiento vehículo (km/L)</label>
-          <input id="rendimiento" type="number" value="15" min="1" step="0.1">
-        </div>
+      const combustibleKm = rendimiento > 0 ? combustible / rendimiento : 0;
+      const cobroKm = combustibleKm + desgaste + depreciacion;
+      const cobroMin = metaDiaria / 8 / 60;
 
-        <div class="field">
-          abel for="desgaste">Desgaste adicional por km (CLP)</label>
-          <input id="desgaste" type="number" value="40" min="0" step="1">
-        </div>
+      const acercamiento = pickup ? segment(origen, pickup) : {km:0, min:0};
+      const servicioInicio = pickup || origen;
+      const servicio = segment(servicioInicio, destino);
+      let regreso = {km:0, min:0};
+      if(modoRegreso === 'origen') regreso = segment(destino, origen);
+      if(modoRegreso === 'pickup' && pickup) regreso = segment(destino, pickup);
 
-        <div class="field">
-          abel for="depreciacion">Depreciación por km (CLP)</label>
-          <input id="depreciacion" type="number" value="30" min="0" step="1">
-        </div>
+      const kmTotales = acercamiento.km + servicio.km + regreso.km;
+      const minTotales = acercamiento.min + servicio.min + regreso.min;
+      const costoOperativo = kmTotales * (combustibleKm + desgaste + depreciacion);
+      const precioBase = tarifaBase + (kmTotales * cobroKm) + (minTotales * cobroMin);
+      const precioFinal = precioBase * demanda;
+      const utilidad = precioFinal - costoOperativo;
+      const ingresoDia = precioFinal * viajesDia;
 
-        <div class="field">
-          abel for="metaDiaria">Meta diaria por 8 horas (CLP)</label>
-          <input id="metaDiaria" type="number" value="30000" min="0" step="100">
-        </div>
+      $('cobroKm').textContent = money(cobroKm);
+      $('detalleKm').textContent = `Combustible ${money(combustibleKm)} + desgaste ${money(desgaste)} + depreciación ${money(depreciacion)}`;
+      $('cobroMin').textContent = money(cobroMin);
+      $('kmTotales').textContent = `${kmTotales.toFixed(1).replace('.',',')} km`;
+      $('detalleRuta').textContent = `Acercamiento ${acercamiento.km.toFixed(1).replace('.',',')} km · servicio ${servicio.km.toFixed(1).replace('.',',')} km · regreso ${regreso.km.toFixed(1).replace('.',',')} km`;
+      $('precioFinal').textContent = money(precioFinal);
+      $('detallePrecio').textContent = `Tarifa base ${money(tarifaBase)} y demanda x${demanda.toFixed(2)}`;
+      $('tiempoTotal').textContent = `${Math.round(minTotales)} min`;
+      $('ingresoDia').textContent = money(ingresoDia);
+      $('costoViaje').textContent = money(costoOperativo);
+      $('utilidadViaje').textContent = money(utilidad);
+      $('utilidadViaje').className = utilidad >= 0 ? 'good' : 'warn';
+      $('rutaResumen').textContent = `${origen} → ${pickup ? pickup + ' → ' : ''}${destino}`;
 
-        <div class="field">
-          abel for="tarifaBase">Tarifa base (CLP)</label>
-          <input id="tarifaBase" type="number" value="280" min="0" step="10">
-        </div>
+      const rows = [
+        ['Acercamiento', money(acercamiento.km * cobroKm), `${acercamiento.km.toFixed(1).replace('.',',')} km · ${Math.round(acercamiento.min)} min`],
+        ['Tramo principal', money(servicio.km * cobroKm), `${servicio.km.toFixed(1).replace('.',',')} km · ${Math.round(servicio.min)} min`],
+        ['Regreso', money(regreso.km * cobroKm), `${regreso.km.toFixed(1).replace('.',',')} km · ${Math.round(regreso.min)} min`],
+        ['Componente tiempo', money(minTotales * cobroMin), `${Math.round(minTotales)} min × ${money(cobroMin)}`],
+        ['Tarifa base', money(tarifaBase), 'Arranque del servicio'],
+        ['Factor demanda', `x${demanda.toFixed(2)}`, 'Multiplica el subtotal del viaje'],
+        ['Precio final sugerido', money(precioFinal), utilidad >= 0 ? 'Con utilidad estimada positiva' : 'Revisar tarifa, utilidad negativa']
+      ];
+      $('desglose').innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+    }
 
-        <div class="field">
-          abel for="demanda">Factor de demanda</label>
-          <input id="demanda" type="number" value="1" min="0.5" max="3" step="0.05">
-        </div>
+    fillSelect('origen'); fillSelect('destino'); fillSelect('pickup', true);
+    $('origen').value = 'Rosario Río';
+    $('destino').value = 'San Vicente (Plaza)';
+    $('pickup').value = '';
 
-        <div class="field">
-          abel for="viajesDia">Viajes diarios estimados</label>
-          <input id="viajesDia" type="number" value="10" min="1" step="1">
-        </div>
+    ['origen','destino','pickup','modoRegreso','combustible','rendimiento','desgaste','depreciacion','metaDiaria','tarifaBase','demanda','viajesDia']
+      .forEach(id => $(id).addEventListener('input', update));
 
-      </div>
-    </section>
+    const themeBtn = $('themeBtn');
+    function setTheme(mode){
+      document.documentElement.setAttribute('data-theme', mode);
+      themeBtn.textContent = mode === 'dark' ? '☀️ Tema' : '🌙 Tema';
+    }
+    let mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    setTheme(mode);
+    themeBtn.addEventListener('click', ()=>{mode = mode === 'dark' ? 'light' : 'dark'; setTheme(mode);});
 
-    <section class="card">
-      <div class="section-title">
-        <h2>Resultado automático</h2>
-        <div class="badge" id="rutaResumen">Ruta lista</div>
-      </div>
-
-      <div class="kpis">
-        <div class="kpi">
-          <div class="label">Cobro por km calculado</div>
-          <div class="value" id="cobroKm">$0</div>
-          <div class="subv" id="detalleKm">Combustible + desgaste + depreciación</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Cobro por minuto calculado</div>
-          <div class="value" id="cobroMin">$0</div>
-          <div class="subv">Meta diaria / 8 horas / 60</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Km operativos totales</div>
-          <div class="value" id="totales">0 km</div>
-          <div class="subv" id="detalleRuta">Incluye acercamiento y retorno</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Precio final sugerido</div>
-          <div class="value" id="precioFinal">$0</div>
-          <div class="subv" id="detallePrecio">Tarifa base + km + tiempo</div>
-        </div>
-      </div>
-
-      <div class="strip">
-        <div class="pill"><strong id="tiempoTotal">0 min</strong><br>Tiempo total</div>
-        <div class="pill"><strong id="ingresoDia">$0</strong><br>Ingreso diario bruto</div>
-        <div class="pill"><strong id="costoViaje">$0</strong><br>Costo operativo viaje</div>
-        <div class="pill"><strong id="utilidadViaje">$0</strong><br>Utilidad estimada</div>
-      </div>
-
-      <table>
-        <thead><tr><th>Concepto</th><th>Valor</th><th>Detalle</th></tr></thead>
-        <tbody id="desglose"></tbody>
-      </table>
-
-      <div class="footer-note">Ramal A: Las Cabras → San Vicente (Plaza). Ramal B: Códao → Santa Elena → Pichidegua.</div>
-    </section>
-  </div>
-</div>
-
-<script>
-const graph={
-  'Las Cabras':{'La Esperanza':{km:5.4,min:8}},
-  'La Esperanza':{'Las Cabras':{km:5.4,min:8},'La Rosa':{km:9.7,min:10}},
-  'La Rosa':{'La Esperanza':{km:9.7,min:10},'Rosario Río':{km:3.0,min:3}},
-  'Rosario Río':{'La Rosa':{km:3.0,min:3},'Códao':{km:1.9,min:3}},
-  'Códao':{'Rosario Río':{km:1.9,min:3},'Concha y Toro':{km:1.8,min:2},'Santa Elena':{km:1.7,min:2}},
-  'Santa Elena':{'Códao':{km:1.7,min:2},'Pichidegua':{km:7.5,min:11}},
-  'Pichidegua':{'Santa Elena':{km:7.5,min:11}},
-  'Concha y Toro':{'Códao':{km:1.8,min:2},'Sofruco':{km:2.4,min:3}},
-  'Sofruco':{'Concha y Toro':{km:2.4,min:3},'Peumo':{km:2.1,min:4}},
-  'Peumo':{'Sofruco':{km:2.1,min:4},'Tunca Abajo':{km:5.7,min:7}},
-  'Tunca Abajo':{'Peumo':{km:5.7,min:7},'San Vicente (Plaza)':{km:5.6,min:9}},
-  'San Vicente (Plaza)':{'Tunca Abajo':{km:5.6,min:9}}
-};
-const points=Object.keys(graph);
-const $=id=>document.getElementById(id);
-const money=n=>'$'+Math.round(n).toLocaleString('es-CL');
-const num=id=>Number($(id).value||0);
-
-function dijkstra(start,end){
-  if(!start||!end||start===end)return{km:0,min:0};
-  const dist={},prev={},visited=new Set();
+    update();
+  </script>
+</body>
+</html>
