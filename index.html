@@ -9,17 +9,8 @@
   //fonts.gstatic.com" crossorigin>
   //fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #f7f6f2; --surface:#f9f8f5; --surface-2:#ffffff; --line:#d4d1ca;
-      --text:#28251d; --muted:#6f6d67; --primary:#01696f; --primary-2:#0c4e54;
-      --success:#2e5c10; --warn:#964219; --shadow:0 10px 28px rgba(26,26,26,0.08);
-      --radius:18px;
-    }
-    [data-theme="dark"] {
-      --bg:#171614; --surface:#1c1b19; --surface-2:#201f1d; --line:#393836;
-      --text:#ece8df; --muted:#a8a39a; --primary:#4f98a3; --primary-2:#6ab0bb;
-      --success:#86c361; --warn:#d69b72; --shadow:0 10px 28px rgba(0,0,0,.35);
-    }
+    :root{--bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#ffffff;--line:#d4d1ca;--text:#28251d;--muted:#6f6d67;--primary:#01696f;--primary-2:#0c4e54;--success:#2e5c10;--warn:#964219;--shadow:0 10px 28px rgba(26,26,26,.08);--radius:18px}
+    [data-theme="dark"]{--bg:#171614;--surface:#1c1b19;--surface-2:#201f1d;--line:#393836;--text:#ece8df;--muted:#a8a39a;--primary:#4f98a3;--primary-2:#6ab0bb;--success:#86c361;--warn:#d69b72;--shadow:0 10px 28px rgba(0,0,0,.35)}
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
     body{min-height:100vh}
@@ -60,7 +51,6 @@
   </style>
 </head>
 <body>
-
 <div class="app">
   <div class="topbar">
     <div class="brand">
@@ -72,7 +62,6 @@
     </div>
     <button class="toggle" id="themeBtn" aria-label="Cambiar tema">🌙 Tema</button>
   </div>
-
   <div class="grid">
     <section class="card">
       <h2>Parámetros</h2>
@@ -89,7 +78,7 @@
         <div class="field">
           abel for="pickup">Recoger pasajero en otro punto</label>
           <select id="pickup"></select>
-          <div class="hint">Opcional. Si eliges uno, se suma el acercamiento antes del viaje.</div>
+          <div class="hint">Opcional. Se suma el acercamiento antes del viaje.</div>
         </div>
         <div class="field">
           abel for="modoRegreso">Modo de retorno</label>
@@ -133,33 +122,16 @@
         </div>
       </div>
     </section>
-
     <section class="card">
       <div class="section-title">
         <h2>Resultado automático</h2>
         <div class="badge" id="rutaResumen">Ruta lista</div>
       </div>
       <div class="kpis">
-        <div class="kpi">
-          <div class="label">Cobro por km calculado</div>
-          <div class="value" id="cobroKm">$0</div>
-          <div class="subv" id="detalleKm">Combustible + desgaste + depreciación</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Cobro por minuto calculado</div>
-          <div class="value" id="cobroMin">$0</div>
-          <div class="subv">Meta diaria / 8 horas / 60</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Km operativos totales</div>
-          <div class="value" id="kmTotales">0 km</div>
-          <div class="subv" id="detalleRuta">Incluye acercamiento y retorno</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Precio final sugerido</div>
-          <div class="value" id="precioFinal">$0</div>
-          <div class="subv" id="detallePrecio">Tarifa base + km + tiempo, ajustado por demanda</div>
-        </div>
+        <div class="kpi"><div class="label">Cobro por km calculado</div><div class="value" id="cobroKm">$0</div><div class="subv" id="detalleKm">Combustible + desgaste + depreciación</div></div>
+        <div class="kpi"><div class="label">Cobro por minuto calculado</div><div class="value" id="cobroMin">$0</div><div class="subv">Meta diaria / 8 horas / 60</div></div>
+        <div class="kpi"><div class="label">Km operativos totales</div><div class="value" id="kmTotales">0 km</div><div class="subv" id="detalleRuta">Incluye acercamiento y retorno</div></div>
+        <div class="kpi"><div class="label">Precio final sugerido</div><div class="value" id="precioFinal">$0</div><div class="subv" id="detallePrecio">Tarifa base + km + tiempo</div></div>
       </div>
       <div class="strip">
         <div class="pill"><strong id="tiempoTotal">0 min</strong><br>Tiempo total</div>
@@ -171,30 +143,38 @@
         <thead><tr><th>Concepto</th><th>Valor</th><th>Detalle</th></tr></thead>
         <tbody id="desglose"></tbody>
       </table>
-      <div class="footer-note">
-        Ramal A: Las Cabras → San Vicente (Plaza). Ramal B: Códao → Santa Elena → Pichidegua.
-      </div>
+      <div class="footer-note">Ramal A: Las Cabras → San Vicente (Plaza). Ramal B: Códao → Santa Elena → Pichidegua.</div>
     </section>
   </div>
 </div>
-
 <script>
-const graph = {
-  'Las Cabras':          { 'La Esperanza': {km:5.4, min:8} },
-  'La Esperanza':        { 'Las Cabras': {km:5.4, min:8}, 'La Rosa': {km:9.7, min:10} },
-  'La Rosa':             { 'La Esperanza': {km:9.7, min:10}, 'Rosario Río': {km:3.0, min:3} },
-  'Rosario Río':         { 'La Rosa': {km:3.0, min:3}, 'Códao': {km:1.9, min:3} },
-  'Códao':               { 'Rosario Río': {km:1.9, min:3}, 'Concha y Toro': {km:1.8, min:2}, 'Santa Elena': {km:1.7, min:2} },
-  'Santa Elena':         { 'Códao': {km:1.7, min:2}, 'Pichidegua': {km:7.5, min:11} },
-  'Pichidegua':          { 'Santa Elena': {km:7.5, min:11} },
-  'Concha y Toro':       { 'Códao': {km:1.8, min:2}, 'Sofruco': {km:2.4, min:3} },
-  'Sofruco':             { 'Concha y Toro': {km:2.4, min:3}, 'Peumo': {km:2.1, min:4} },
-  'Peumo':               { 'Sofruco': {km:2.1, min:4}, 'Tunca Abajo': {km:5.7, min:7} },
-  'Tunca Abajo':         { 'Peumo': {km:5.7, min:7}, 'San Vicente (Plaza)': {km:5.6, min:9} },
-  'San Vicente (Plaza)': { 'Tunca Abajo': {km:5.6, min:9} }
+const graph={
+  'Las Cabras':{'La Esperanza':{km:5.4,min:8}},
+  'La Esperanza':{'Las Cabras':{km:5.4,min:8},'La Rosa':{km:9.7,min:10}},
+  'La Rosa':{'La Esperanza':{km:9.7,min:10},'Rosario Río':{km:3.0,min:3}},
+  'Rosario Río':{'La Rosa':{km:3.0,min:3},'Códao':{km:1.9,min:3}},
+  'Códao':{'Rosario Río':{km:1.9,min:3},'Concha y Toro':{km:1.8,min:2},'Santa Elena':{km:1.7,min:2}},
+  'Santa Elena':{'Códao':{km:1.7,min:2},'Pichidegua':{km:7.5,min:11}},
+  'Pichidegua':{'Santa Elena':{km:7.5,min:11}},
+  'Concha y Toro':{'Códao':{km:1.8,min:2},'Sofruco':{km:2.4,min:3}},
+  'Sofruco':{'Concha y Toro':{km:2.4,min:3},'Peumo':{km:2.1,min:4}},
+  'Peumo':{'Sofruco':{km:2.1,min:4},'Tunca Abajo':{km:5.7,min:7}},
+  'Tunca Abajo':{'Peumo':{km:5.7,min:7},'San Vicente (Plaza)':{km:5.6,min:9}},
+  'San Vicente (Plaza)':{'Tunca Abajo':{km:5.6,min:9}}
 };
+const points=Object.keys(graph);
+const $=id=>document.getElementById(id);
+const money=n=>'$'+Math.round(n).toLocaleString('es-CL');
+const num=id=>Number($(id).value||0);
 
-const points = Object.keys(graph);
-const $ = id => document.getElementById(id);
-const money = n => '$' + Math.round(n).toLocaleString('es-CL');
-const num = id => Number($(id).value ||
+function dijkstra(start,end){
+  if(!start||!end||start===end)return{km:0,min:0};
+  const dist={},prev={},visited=new Set();
+  points.forEach(p=>dist[p]=Infinity);
+  dist[start]=0;
+  let queue=[...points];
+  while(queue.length){
+    queue.sort((a,b)=>dist[a]-dist[b]);
+    const u=queue.shift();
+    if(u===end||dist[u]===Infinity)break;
+    visited.add
